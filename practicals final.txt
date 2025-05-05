@@ -1,0 +1,231 @@
+
+
+---
+
+1. Family Tree with User Input
+
+:- dynamic parent/2.
+:- dynamic male/1.
+:- dynamic female/1.
+
+start_family :-
+    write('How many parent-child relationships to enter? '), read(N),
+    read_family(N),
+    write('Enter person to check if father: '), read(X),
+    write('Enter child: '), read(Y),
+    (father(X, Y) -> write(X), write(' is the father of '), write(Y), nl ;
+     write(X), write(' is not the father of '), write(Y), nl).
+
+read_family(0).
+read_family(N) :-
+    N > 0,
+    write('Enter parent name: '), read(P),
+    write('Enter child name: '), read(C),
+    assertz(parent(P, C)),
+    write('Is '), write(P), write(' male or female? (m/f): '), read(G1),
+    (G1 == m -> assertz(male(P)); assertz(female(P))),
+    write('Is '), write(C), write(' male or female? (m/f): '), read(G2),
+    (G2 == m -> assertz(male(C)); assertz(female(C))),
+    N1 is N - 1,
+    read_family(N1).
+
+father(X, Y) :- parent(X, Y), male(X).
+mother(X, Y) :- parent(X, Y), female(X).
+
+
+---
+
+2. Concatenate Two Lists
+
+start_concat :-
+    write('Enter first list: '), read(L1),
+    write('Enter second list: '), read(L2),
+    conc(L1, L2, L3),
+    write('Concatenated List: '), write(L3), nl.
+
+conc([], L, L).
+conc([H|T], L2, [H|R]) :- conc(T, L2, R).
+
+
+---
+
+3. Reverse a List
+
+start_reverse :-
+    write('Enter a list to reverse: '), read(L),
+    reverse(L, R),
+    write('Reversed List: '), write(R), nl.
+
+reverse([], []).
+reverse([H|T], R) :- reverse(T, RT), conc(RT, [H], R).
+
+
+---
+
+4. Sum of Two Numbers
+
+start_sum :-
+    write('Enter first number: '), read(X),
+    write('Enter second number: '), read(Y),
+    Sum is X + Y,
+    write('Sum is: '), write(Sum), nl.
+
+
+---
+
+5. Maximum of Two Numbers
+
+start_max :-
+    write('Enter X: '), read(X),
+    write('Enter Y: '), read(Y),
+    max(X, Y, M),
+    write('Maximum is: '), write(M), nl.
+
+max(X, Y, X) :- X >= Y.
+max(X, Y, Y) :- Y > X.
+
+
+---
+
+6. Factorial
+
+start_fact :-
+    write('Enter number N: '), read(N),
+    factorial(N, F),
+    write('Factorial is: '), write(F), nl.
+
+factorial(0, 1).
+factorial(N, F) :- N > 0, N1 is N-1, factorial(N1, F1), F is N * F1.
+
+
+---
+
+7. Generate Nth Fibonacci Term
+
+start_fib :-
+    write('Enter N for Nth Fibonacci term: '), read(N),
+    generate_fib(N, T),
+    write('Fibonacci term is: '), write(T), nl.
+
+generate_fib(0, 0).
+generate_fib(1, 1).
+generate_fib(N, T) :- 
+    N > 1, 
+    N1 is N-1, N2 is N-2,
+    generate_fib(N1, T1), generate_fib(N2, T2),
+    T is T1 + T2.
+
+
+---
+
+8. Power of a Number
+
+start_power :-
+    write('Enter base: '), read(Num),
+    write('Enter power: '), read(Pow),
+    power(Num, Pow, Ans),
+    write('Result: '), write(Ans), nl.
+
+power(_, 0, 1).
+power(Num, Pow, Ans) :- Pow > 0, P1 is Pow - 1, power(Num, P1, A1), Ans is Num * A1.
+
+
+---
+
+9. Multiplication
+
+start_multi :-
+    write('Enter N1: '), read(N1),
+    write('Enter N2: '), read(N2),
+    multi(N1, N2, R),
+    write('Product: '), write(R), nl.
+
+multi(0, _, 0).
+multi(N1, N2, R) :- N1 > 0, N is N1 - 1, multi(N, N2, R1), R is R1 + N2.
+
+
+---
+
+10. Membership Check
+
+start_member :-
+    write('Enter element: '), read(X),
+    write('Enter list: '), read(L),
+    (memb(X, L) -> write('Yes, member') ; write('No, not member')), nl.
+
+memb(X, [X|_]).
+memb(X, [_|T]) :- memb(X, T).
+
+
+---
+
+11. Sum of List Elements
+
+start_sumlist :-
+    write('Enter list: '), read(L),
+    sumlist(L, S),
+    write('Sum is: '), write(S), nl.
+
+sumlist([], 0).
+sumlist([H|T], S) :- sumlist(T, S1), S is S1 + H.
+
+
+---
+
+12. Even/Odd Length Check
+
+start_length_check :-
+    write('Enter list: '), read(L),
+    (evenlength(L) -> write('Even length') ; oddlength(L) -> write('Odd length') ; write('Unknown')), nl.
+
+evenlength([]).
+evenlength([_,_|T]) :- evenlength(T).
+
+oddlength([_]).
+oddlength([_,_|T]) :- oddlength(T).
+
+
+---
+
+13. Maximum of List
+
+start_maxlist :-
+    write('Enter list: '), read(L),
+    maxlist(L, M),
+    write('Maximum is: '), write(M), nl.
+
+maxlist([X], X).
+maxlist([H|T], M) :- maxlist(T, MT), max(H, MT, M).
+
+
+---
+
+14. Insert Element at Nth Position
+
+start_insert :-
+    write('Enter element to insert: '), read(E),
+    write('Enter list: '), read(L),
+    write('Enter position: '), read(N),
+    insert(E, L, N, R),
+    write('Updated list: '), write(R), nl.
+
+insert(E, L, 1, [E|L]).
+insert(E, [H|T], N, [H|R]) :- N > 1, N1 is N - 1, insert(E, T, N1, R).
+
+
+---
+
+15. Delete Element at Nth Position
+
+start_delete :-
+    write('Enter list: '), read(L),
+    write('Enter position to delete: '), read(N),
+    delete(N, L, R),
+    write('Updated list: '), write(R), nl.
+
+delete(1, [_|T], T).
+delete(N, [H|T], [H|R]) :- N > 1, N1 is N - 1, delete(N1, T, R).
+
+
+---
+
